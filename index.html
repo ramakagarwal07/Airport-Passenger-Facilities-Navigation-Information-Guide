@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLR Terminal 2 | Official Gateway</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="customToast">Notification message</div>
+
+<div id="loginPage">
+<div class="login-card">
+<h2 style="color:var(--primary); font-family:'Playfair Display'; margin-bottom:10px">BLR T2 Portal</h2>
+<p style="font-size:0.8rem; margin-bottom:20px">Please Login to Access Kiosk & Maps</p>
+<input type="text" id="user" class="login-input" placeholder="Username (Admin)">
+<input type="password" id="pass" class="login-input" placeholder="Password (1234)">
+<button class="btn-kiosk" onclick="handleLogin()">Sign In</button>
+</div>
+</div>
+
+<nav id="mainNav">
+<div style="font-weight:800;">BLR T2</div>
+<div class="nav-links">
+<span onclick="showPage('home')">Home</span>
+<span onclick="showPage('liveFlights')">Live Flights</span>
+<span onclick="showPage('map')">GPS Map</span>
+<span onclick="showPage('terminal')">Terminal Square</span>
+<span onclick="showPage('kiosk')">Kiosk</span>
+<span onclick="location.reload()" style="color:var(--danger)">Logout</span>
+</div>
+</nav>
+
+<section id="home" class="page">
+<div style="height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1542296332-2e4473faf563?auto=format&fit=crop&w=1600&q=80'); background-size: cover; color: white; padding: 0 20px;">
+<h1 style="font-family:'Playfair Display'; font-size: 3.5rem;">Terminal in a Garden</h1>
+<p>Explore luxury, nature, and seamless travel at BLR T2.</p>
+</div>
+</section>
+
+<section id="liveFlights" class="page">
+<div style="background: var(--primary); color: white; padding: 40px 5%;">
+<h2 style="font-family:'Playfair Display'; font-size: 2.2rem;">Live Flight Information</h2>
+<p>Track real-time flight arrivals and departures</p>
+
+<div style="display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; align-items: center;">
+<div style="background: #eee; border-radius: 8px; overflow: hidden; display: flex;">
+<button id="arrBtn" class="toggle-btn" style="background: var(--dark-blue); color:white;" onclick="toggleFlights('arrivals')">Arrivals</button>
+<button id="depBtn" class="toggle-btn" style="background: #ddd; color:black;" onclick="toggleFlights('departures')">Departures</button>
+</div>
+
+<input type="text" id="fSearch" placeholder="Search Flight, City or Airline..." style="flex-grow: 1; padding: 13px; border-radius: 8px; border: none; outline: none;" onkeyup="renderFlights()">
+</div>
+</div>
+
+<div class="flight-container">
+<table class="flight-table">
+<thead>
+<tr>
+<th>AIRLINES</th>
+<th>FLIGHT NO.</th>
+<th id="locHeader">ORIGIN</th>
+<th>DATE</th>
+<th>TIME</th>
+<th id="beltHeader">BELT NO.</th>
+<th>STATUS</th>
+</tr>
+</thead>
+<tbody id="flightRows"></tbody>
+</table>
+</div>
+</section>
+
+<section id="map" class="page">
+<div style="text-align:center; padding: 40px 0;">
+<h2 style="font-family:'Playfair Display'; font-size: 2rem;">Real-time Airport Layout</h2>
+<p>Follow the gold path to your destination</p>
+
+<button class="btn-kiosk" style="margin-top: 10px; background: #64748b; width: 150px;" onclick="clearMapPath()">Clear Path</button>
+</div>
+
+<div class="map-container" style="position: relative;">
+<svg id="mapGuideSVG" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10;">
+<path id="guidePath" d="" stroke="#f59e0b" stroke-width="4" fill="transparent" stroke-dasharray="8,8" />
+</svg>
+
+<div id="mapGrid" class="map-grid"></div>
+</div>
+</section>
+
+<section id="terminal" class="page">
+<div style="text-align:center; padding: 50px 5% 10px;">
+<h2 style="font-family:'Playfair Display'; font-size: 2.5rem;">Terminal Square</h2>
+</div>
+
+<div class="filter-bar">
+<button class="filter-btn active" onclick="filterStores('all', this)">All</button>
+<button class="filter-btn" onclick="filterStores('Shopping', this)">Shopping (20)</button>
+<button class="filter-btn" onclick="filterStores('Food', this)">Food & Beverage (20)</button>
+</div>
+
+<div class="terminal-grid" id="storeGrid"></div>
+</section>
+
+<section id="storeDetails" class="page">
+<div id="storeDetailContent"></div>
+</section>
+
+<section id="kiosk" class="page">
+<div class="kiosk-frame">
+
+<div class="search-area" id="kioskStep1">
+<h2>Flight Search</h2>
+
+<div class="grid-inputs" style="margin-top:20px">
+<div class="input-cell">
+<label>From</label>
+<input type="text" value="Kempegowda (BLR)" disabled>
+</div>
+
+<div class="input-cell">
+<label>To</label>
+<input type="text" id="kDest" placeholder="e.g. Jaipur" autocomplete="off">
+<div id="suggestions"></div>
+</div>
+
+<div class="input-cell">
+<label>Date</label>
+<input type="date" id="kDate">
+</div>
+
+<div class="input-cell">
+<label>Class</label>
+<select id="kClass">
+<option>Economy</option>
+<option>Business</option>
+</select>
+</div>
+</div>
+
+<div class="input-cell" style="margin-bottom:20px">
+<label>Number of Passengers</label>
+<input type="number" id="kPax" value="1" min="1" onchange="renderKPax()">
+</div>
+
+<div id="paxInputs"></div>
+
+<button class="btn-kiosk" onclick="kioskSearch()">Find Flights</button>
+</div>
+
+<div class="search-area" id="kioskStep2" style="display:none">
+<div onclick="kioskBack(1)" style="cursor:pointer; color:var(--primary); font-weight:700; margin-bottom:15px">← BACK</div>
+<div id="flightResults"></div>
+</div>
+
+<div class="search-area" id="kioskStep3" style="display:none; text-align:center">
+<div style="font-size:4rem; color:var(--success)">✓</div>
+<h2>Booking Confirmed</h2>
+<p id="kSummary" style="margin:20px 0"></p>
+<button class="btn-kiosk" onclick="resetKiosk()">Finish & New Booking</button>
+</div>
+
+</div>
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
